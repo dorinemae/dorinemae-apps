@@ -8,7 +8,7 @@ The **DorineMae Apps** plugin enhances Elementor’s functionality with essentia
 Easily clear Elementor's cache and sync the library with a single click to improve performance.  
 
 ✅ **Auto-Expire Elementor Sections or Widgets**  
-Set expiration times for sections/widgets using a custom CSS class or ID, automatically hiding them when the set time is reached.  
+Set expiration times for sections/widgets using a custom CSS class, automatically hiding them when the set time is reached.  
 
 ## Installation  
 
@@ -54,7 +54,7 @@ Set expiration times for sections/widgets using a custom CSS class or ID, automa
 ## Usage  
 
 - **Cache Cleanup:** Click the **CleanUp Elementor** button in the admin bar when enabled.  
-- **Auto-Expire:** Elements matching the specified class/ID will automatically disappear at the scheduled time.  
+- **Auto-Expire:** Elements matching the specified class will automatically disappear at the scheduled time.  
 
 ## Contributing  
 
