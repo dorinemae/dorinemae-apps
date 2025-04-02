@@ -23,14 +23,33 @@ Set expiration times for sections/widgets using a custom CSS class or ID, automa
 2. Upload the `dorinemae-apps` folder to `/wp-content/plugins/` via FTP.  
 3. Go to **Plugins** in WordPress and activate **DorineMae Apps**.  
 
-## Configuration  
+## Configuration
 
-1. After activation, navigate to **DorineMae Apps** in the WordPress admin menu.  
-2. Configure settings as needed:  
-   - **Enable "Clear Elementor Cache & Sync"** to add a quick cleanup button to the admin bar.  
-   - **Enable "Auto-Expire Elementor Sections/Widgets"** to schedule expiration for specific elements.  
-3. If Auto-Expire is enabled, click **“Add Expiry”** to set a date/time and a CSS class or ID for elements to expire.  
-4. Click **Save Changes** and confirm the settings.  
+1. **Access Plugin Settings**  
+   After activating the plugin, navigate to **DorineMae Apps** in the WordPress admin menu to access your plugin settings.
+
+2. **Elementor Cache & Sync Feature**  
+   - **Enable "Clear Elementor Cache & Sync":**  
+     Enable this option to add a **CleanUp Elementor** button to the admin bar.
+   - **How It Works:**  
+     Clicking the **CleanUp Elementor** button triggers an AJAX process that simulates clearing Elementor’s cache and syncing its library.
+   - **Visual Feedback:**  
+     - Spinner buttons update their state sequentially:
+       - **Default:** `button elementor-button-spinner`
+       - **Loading:** `button elementor-button-spinner loading`
+       - **Success:** `button elementor-button-spinner success`
+     - A centered popup message—“Elementor cache cleared and library synced successfully.”—appears in the middle of the screen.
+     - Approximately 1 second after the popup disappears, the page automatically refreshes.
+
+3. **Auto-Expire Elementor Sections/Widgets Feature**  
+   - **Auto-Expire Functionality is Always Active:**  
+     This feature automatically hides Elementor sections or widgets once the specified expiration timestamp is reached.
+   - **Setting Expiry Rules:**  
+     In the plugin settings, simply enter the CSS class of the target element and set the corresponding date and time for when it should be hidden. Once you click **Save Changes**, the expiry rule becomes active, and the specified elements will automatically be hidden at the scheduled time.
+
+4. **Save Your Settings**  
+   After configuring the options above, click **Save Changes** to update your settings.
+ 
 
 ## Usage  
 
