@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin version constant.
-define( 'EXPERIMENT_PLUGIN_VERSION', '1.4' );
+define( 'DM_PLUGIN_VERSION', '1.4' );
 
 // Include the settings page.
 require_once plugin_dir_path( __FILE__ ) . 'settings.php';
@@ -22,7 +22,7 @@ require_once plugin_dir_path( __FILE__ ) . 'settings.php';
 /**
  * Enqueue plugin scripts and styles.
  */
-function experiment_enqueue_scripts() {
+function dm_enqueue_scripts() {
     // Load jQuery hoverIntent. Try to load the local file; otherwise, fall back to a CDN.
     $hoverIntentPath = plugin_dir_path( __FILE__ ) . 'js/jquery.hoverIntent.min.js';
     if ( file_exists( $hoverIntentPath ) ) {
@@ -41,67 +41,67 @@ function experiment_enqueue_scripts() {
 
     // Enqueue Auto-Expire script.
     wp_enqueue_script(
-        'experiment-auto-expire',
+        'dm-auto-expire',
         plugins_url( 'js/auto-expire.js', __FILE__ ),
         array( 'jquery', 'jquery-hoverIntent' ),
-        EXPERIMENT_PLUGIN_VERSION,
+        DM_PLUGIN_VERSION,
         true
     );
     // Localize auto-expire settings.
-    $auto_expire_settings = get_option( 'experiment_auto_expire', array( 'entries' => array() ) );
-    wp_localize_script( 'experiment-auto-expire', 'experiment_auto_expire_settings', $auto_expire_settings );
+    $auto_expire_settings = get_option( 'dm_auto_expire', array( 'entries' => array() ) );
+    wp_localize_script( 'dm-auto-expire', 'dm_auto_expire_settings', $auto_expire_settings );
 
     // Enqueue Cache & Sync script.
     wp_enqueue_script(
-        'experiment-cache-sync',
+        'dm-cache-sync',
         plugins_url( 'js/cache-sync.js', __FILE__ ),
         array( 'jquery', 'jquery-hoverIntent' ),
-        EXPERIMENT_PLUGIN_VERSION,
+        DM_PLUGIN_VERSION,
         true
     );
     wp_localize_script(
-        'experiment-cache-sync',
-        'experiment_ajax',
+        'dm-cache-sync',
+        'dm_ajax',
         array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) )
     );
 
     // Enqueue plugin stylesheet.
     wp_enqueue_style(
-        'experiment-plugin-style',
+        'dm-plugin-style',
         plugins_url( 'style.css', __FILE__ ),
         array(),
-        EXPERIMENT_PLUGIN_VERSION
+        DM_PLUGIN_VERSION
     );
 }
-add_action( 'wp_enqueue_scripts', 'experiment_enqueue_scripts' );
-add_action( 'admin_enqueue_scripts', 'experiment_enqueue_scripts' );
+add_action( 'wp_enqueue_scripts', 'dm_enqueue_scripts' );
+add_action( 'admin_enqueue_scripts', 'dm_enqueue_scripts' );
 
 /**
  * AJAX action handler for Cache & Sync.
  */
-function experiment_cache_sync_handler() {
+function dm_cache_sync_handler() {
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_send_json_error( 'Insufficient permissions.' );
     }
     $enable = isset( $_POST['enable'] ) && $_POST['enable'] === 'true';
     if ( $enable ) {
-        update_option( 'experiment_cache_sync', 'enabled' );
+        update_option( 'dm_cache_sync', 'enabled' );
         wp_send_json_success( 'Elementor Cache & Sync Enabled' );
     } else {
-        update_option( 'experiment_cache_sync', 'disabled' );
+        update_option( 'dm_cache_sync', 'disabled' );
         wp_send_json_success( 'Elementor Cache & Sync Disabled' );
     }
 }
-add_action( 'wp_ajax_experiment_cache_sync', 'experiment_cache_sync_handler' );
+add_action( 'wp_ajax_dm_cache_sync', 'dm_cache_sync_handler' );
 
 /**
  * Add "CleanUp Elementor" to the admin bar when Cache & Sync is enabled.
  */
-function experiment_admin_bar_cleanup( $wp_admin_bar ) {
+function dm_admin_bar_cleanup( $wp_admin_bar ) {
     if ( ! current_user_can( 'manage_options' ) ) {
         return;
     }
-    $cache_sync_status = get_option( 'experiment_cache_sync', 'disabled' );
+    $cache_sync_status = get_option( 'dm_cache_sync', 'disabled' );
     if ( 'enabled' === $cache_sync_status ) {
         $wp_admin_bar->add_node( array(
             'id'    => 'cleanup-elementor',
@@ -110,26 +110,26 @@ function experiment_admin_bar_cleanup( $wp_admin_bar ) {
         ) );
     }
 }
-add_action( 'admin_bar_menu', 'experiment_admin_bar_cleanup', 100 );
+add_action( 'admin_bar_menu', 'dm_admin_bar_cleanup', 100 );
 
 /**
  * AJAX action handler for Elementor cleanup.
  * (You can add any server-side cleanup code here if needed.)
  */
-function experiment_cleanup_elementor_ajax() {
+function dm_cleanup_elementor_ajax() {
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_send_json_error( "Not allowed" );
     }
     // (Optional) Add server-side cleanup tasks here.
     wp_send_json_success( "Cleanup complete" );
 }
-add_action( 'wp_ajax_experiment_cleanup_elementor', 'experiment_cleanup_elementor_ajax' );
+add_action( 'wp_ajax_dm_cleanup_elementor', 'dm_cleanup_elementor_ajax' );
 
 /**
  * Inline script in the admin footer to handle the "CleanUp Elementor" click.
  * Updates spinner classes in sequence and shows a centered popup.
  */
-function experiment_cleanup_inline_script() {
+function dm_cleanup_inline_script() {
     ?>
     <script>
     jQuery(document).ready(function($) {
@@ -153,7 +153,7 @@ function experiment_cleanup_inline_script() {
             $.ajax({
                 url: ajaxurl,
                 method: "POST",
-                data: { action: "experiment_cleanup_elementor" },
+                data: { action: "dm_cleanup_elementor" },
                 success: function(response) {
                     if (response.success) {
                         // Update spinner elements to show "success" after cleanup.
@@ -196,16 +196,16 @@ function experiment_cleanup_inline_script() {
     </script>
     <?php
 }
-add_action('admin_footer', 'experiment_cleanup_inline_script');
+add_action('admin_footer', 'dm_cleanup_inline_script');
 
 /**
  * Customize the Plugins page action links.
  * Only the "Settings" link is retained.
  */
-function experiment_plugin_action_links( $links ) {
-    $settings_link = '<a href="' . admin_url( 'options-general.php?page=experiment-plugin-settings' ) . '">Settings</a>';
+function dm_plugin_action_links( $links ) {
+    $settings_link = '<a href="' . admin_url( 'options-general.php?page=dm-plugin-settings' ) . '">Settings</a>';
     array_unshift( $links, $settings_link );
     return $links;
 }
-add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'experiment_plugin_action_links' );
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'dm_plugin_action_links' );
 ?>

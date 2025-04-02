@@ -1,7 +1,7 @@
 (function($) {
     function updateExpiryElements() {
-        if ( typeof experiment_auto_expire_settings !== 'undefined' && experiment_auto_expire_settings.entries ) {
-            experiment_auto_expire_settings.entries.forEach(function(entry) {
+        if ( typeof dm_auto_expire_settings !== 'undefined' && dm_auto_expire_settings.entries ) {
+            dm_auto_expire_settings.entries.forEach(function(entry) {
                 var cssClass      = entry.css_class;
                 var expiryTimeStr = entry.expiry_time;
                 var expiryTime    = new Date(expiryTimeStr);

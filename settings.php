@@ -6,33 +6,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Add a settings submenu under Options.
  */
-function experiment_add_settings_page() {
+function dm_add_settings_page() {
     add_options_page(
-        'Experiment Plugin Settings',
-        'Experiment Settings',
+        'DorineMae Apps Plugin Settings',
+        'DorineMae Apps',
         'manage_options',
-        'experiment-plugin-settings',
-        'experiment_render_settings_page'
+        'dm-plugin-settings',
+        'dm_render_settings_page'
     );
 }
-add_action( 'admin_menu', 'experiment_add_settings_page' );
+add_action( 'admin_menu', 'dm_add_settings_page' );
 
 /**
  * Render the settings page.
  */
-function experiment_render_settings_page() {
+function dm_render_settings_page() {
     // Retrieve saved options.
-    $cache_sync_value     = get_option( 'experiment_cache_sync', 'disabled' );
-    $auto_expire_settings = get_option( 'experiment_auto_expire', array( 'entries' => array() ) );
+    $cache_sync_value     = get_option( 'dm_cache_sync', 'disabled' );
+    $auto_expire_settings = get_option( 'dm_auto_expire', array( 'entries' => array() ) );
     ?>
     <div class="wrap">
-        <h1>Experiment Plugin Settings (v<?php echo EXPERIMENT_PLUGIN_VERSION; ?>)</h1>
+        <h1>DorineMae Apps Settings (v<?php echo DM_PLUGIN_VERSION; ?>)</h1>
         
         <!-- Cache & Sync Settings -->
         <h2>Enable Elementor Cache & Sync</h2>
         <form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
-            <?php wp_nonce_field( 'experiment_update_cache_sync' ); ?>
-            <input type="hidden" name="action" value="experiment_update_cache_sync">
+            <?php wp_nonce_field( 'dm_update_cache_sync' ); ?>
+            <input type="hidden" name="action" value="dm_update_cache_sync">
             <table class="form-table">
                 <tr valign="top">
                     <th scope="row">Cache & Sync Status</th>
@@ -50,8 +50,8 @@ function experiment_render_settings_page() {
         <!-- Auto-Expire Settings -->
         <h2>Auto-Expire Sections</h2>
         <form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
-            <?php wp_nonce_field( 'experiment_update_auto_expire' ); ?>
-            <input type="hidden" name="action" value="experiment_update_auto_expire">
+            <?php wp_nonce_field( 'dm_update_auto_expire' ); ?>
+            <input type="hidden" name="action" value="dm_update_auto_expire">
             <table class="form-table">
                 <thead>
                     <tr>
@@ -103,27 +103,27 @@ function experiment_render_settings_page() {
 /**
  * Process Cache & Sync settings.
  */
-function experiment_update_cache_sync() {
+function dm_update_cache_sync() {
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_die( 'Not allowed' );
     }
-    check_admin_referer( 'experiment_update_cache_sync' );
+    check_admin_referer( 'dm_update_cache_sync' );
     if ( isset( $_POST['cache_sync_status'] ) && in_array( $_POST['cache_sync_status'], array( 'enabled', 'disabled' ) ) ) {
-        update_option( 'experiment_cache_sync', sanitize_text_field( $_POST['cache_sync_status'] ) );
+        update_option( 'dm_cache_sync', sanitize_text_field( $_POST['cache_sync_status'] ) );
         wp_redirect( add_query_arg( 'updated', 'true', wp_get_referer() ) );
         exit;
     }
 }
-add_action( 'admin_post_experiment_update_cache_sync', 'experiment_update_cache_sync' );
+add_action( 'admin_post_dm_update_cache_sync', 'dm_update_cache_sync' );
 
 /**
  * Process Auto-Expire settings.
  */
-function experiment_update_auto_expire() {
+function dm_update_auto_expire() {
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_die( 'Not allowed' );
     }
-    check_admin_referer( 'experiment_update_auto_expire' );
+    check_admin_referer( 'dm_update_auto_expire' );
     $css_classes = isset( $_POST['auto_expire']['css_class'] ) ? $_POST['auto_expire']['css_class'] : array();
     $expiry_times = isset( $_POST['auto_expire']['expiry_time'] ) ? $_POST['auto_expire']['expiry_time'] : array();
     $entries = array();
@@ -135,9 +135,9 @@ function experiment_update_auto_expire() {
             );
         }
     }
-    update_option( 'experiment_auto_expire', array( 'entries' => $entries ) );
+    update_option( 'dm_auto_expire', array( 'entries' => $entries ) );
     wp_redirect( add_query_arg( 'updated', 'true', wp_get_referer() ) );
     exit;
 }
-add_action( 'admin_post_experiment_update_auto_expire', 'experiment_update_auto_expire' );
+add_action( 'admin_post_dm_update_auto_expire', 'dm_update_auto_expire' );
 ?>

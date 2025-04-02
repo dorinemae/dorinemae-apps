@@ -21,10 +21,10 @@
 
         function toggleCacheSync(enable) {
             $.ajax({
-                url: experiment_ajax.ajaxurl,
+                url: dm_ajax.ajaxurl,
                 type: 'POST',
                 data: {
-                    action: 'experiment_cache_sync',
+                    action: 'dm_cache_sync',
                     enable: enable.toString()
                 },
                 success: function(response) {
