@@ -1,0 +1,23 @@
+/* Style for notifications (example auto-expire use) */
+.experiment-notification {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+/* Style for the Elementor Cache & Sync toggle button */
+#enable-elementor-cache-sync {
+    display: inline-block;
+    background-color: #0073aa;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+#enable-elementor-cache-sync.active {
+    background-color: #46b450;
+}
